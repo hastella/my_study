@@ -263,11 +263,67 @@ Web APIs
 
 ## Data Type
 
-- 원시 primitive (단일 데이터): number, string, boolean, null, undefined, symbol
+- 원시 primitive (단일 데이터): number, string, boolean, null, undefined, symbol, bigint
 - 객체 object (복합 데이터): 상태, 행동
 
 이중 원시타입은 App의 구성요소중 Data와 Stack에 저장되고, 객체타입은 Heap에 저장된다.
 Heap에는 데이터의 크기가 정해져있지 않고, 동적으로 데이터의 저장될 수 있는 '객체' 데이터가 보관된다.
+<br>
+
+## Number와 BigInt의 차이점
+
+**Number**는 JavaScript에서 정수와 실수를 모두 표현하는 기본 숫자 타입이다. 64비트 부동소수점 형식(IEEE 754)을 사용하여 숫자를 저장한다.
+
+```javascript
+const num = 123;
+const floatNum = 123.45;
+console.log(typeof num); // "number"
+```
+
+**Number의 한계점**
+- 안전한 정수 범위: -(2^53 - 1) ~ (2^53 - 1) 사이 (약 -9천조 ~ 9천조)
+- Number.MAX_SAFE_INTEGER: 9007199254740991
+- Number.MIN_SAFE_INTEGER: -9007199254740991
+- 이 범위를 벗어나면 정밀도 손실이 발생할 수 있다.
+
+```javascript
+console.log(9007199254740991 + 1); // 9007199254740992
+console.log(9007199254740991 + 2); // 9007199254740992 (정밀도 손실!)
+```
+
+**BigInt**는 ES2020에 도입된 새로운 원시 타입으로, **임의의 크기를 가진 정수**를 표현할 수 있다. 숫자 뒤에 `n`을 붙여서 표현한다.
+
+```javascript
+const bigInt = 9007199254740991n;
+const anotherBigInt = BigInt("9007199254740991");
+console.log(typeof bigInt); // "bigint"
+```
+
+**BigInt의 특징**
+- 메모리가 허용하는 한 임의로 큰 정수를 표현할 수 있다.
+- 정수만 표현 가능하며, 소수는 표현할 수 없다.
+- Number와 BigInt는 직접 연산할 수 없다. (타입 변환 필요)
+
+```javascript
+const big = 9007199254740991n;
+console.log(big + 1n); // 9007199254740992n
+console.log(big + 2n); // 9007199254740993n (정밀도 유지!)
+
+// 에러 발생: Number와 BigInt는 직접 연산 불가
+// console.log(big + 1); // TypeError: Cannot mix BigInt and other types
+
+// 타입 변환 후 연산
+console.log(big + BigInt(1)); // 9007199254740992n
+console.log(Number(big) + 1); // 9007199254740992 (Number로 변환 시 주의!)
+```
+
+**언제 BigInt를 사용할까?**
+- 매우 큰 정수를 다루는 암호화 작업
+- 고정밀도가 필요한 금융 계산
+- 타임스탬프를 밀리초 단위로 다룰 때
+- ID 값이 매우 큰 경우
+
+🤓 요약: Number는 일반적인 숫자 계산에 사용하며 범위 제한이 있고, BigInt는 범위 제한 없이 큰 정수를 다룰 때 사용한다. 두 타입은 서로 직접 연산할 수 없으므로 명시적 타입 변환이 필요하다.
 <br>
 
 ## Object 객체: 연관된 데이터를 함께 묶어서 보관할 수 있는 복합 데이터
