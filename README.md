@@ -1287,6 +1287,106 @@ export default {
 
 # Algorithm
 
+## 시간복잡도 (Time Complexity)
+
+알고리즘의 **실행 시간이 입력 크기에 따라 어떻게 증가하는지**를 나타내는 지표! 코딩테스트에서 효율적인 알고리즘을 작성하려면 시간복잡도를 이해하는 것이 필수다.
+
+**Big-O 표기법**: 최악의 경우를 기준으로 알고리즘의 성능을 표현
+
+### 주요 시간복잡도
+
+**O(1) - 상수 시간**
+- 입력 크기와 관계없이 항상 일정한 시간이 걸림
+```javascript
+function getFirst(arr) {
+  return arr[0]; // 배열 크기와 무관하게 항상 첫 번째 요소만 반환
+}
+```
+
+**O(n) - 선형 시간**
+- 입력 크기에 비례하여 시간이 증가
+- 배열을 한 번 순회하는 경우
+```javascript
+function sum(arr) {
+  let total = 0;
+  for (let i = 0; i < arr.length; i++) { // n번 반복
+    total += arr[i];
+  }
+  return total;
+}
+```
+
+**O(n²) - 제곱 시간**
+- 입력 크기의 제곱에 비례하여 시간이 증가
+- 2중 for문을 사용하는 경우
+```javascript
+function printPairs(arr) {
+  for (let i = 0; i < arr.length; i++) {     // n번
+    for (let j = 0; j < arr.length; j++) {   // n번
+      console.log(arr[i], arr[j]);           // n × n = n²
+    }
+  }
+}
+```
+
+**O(log n) - 로그 시간**
+- 문제를 절반씩 나누어 해결하는 경우
+- 이진 탐색(Binary Search)이 대표적
+```javascript
+function binarySearch(arr, target) {
+  let left = 0, right = arr.length - 1;
+
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    if (arr[mid] === target) return mid;
+    if (arr[mid] < target) left = mid + 1;
+    else right = mid - 1;
+  }
+  return -1;
+}
+```
+
+**O(n log n) - 선형 로그 시간**
+- 효율적인 정렬 알고리즘의 시간복잡도
+- 병합 정렬(Merge Sort), 퀵 정렬(Quick Sort)
+```javascript
+function mergeSort(arr) {
+  if (arr.length <= 1) return arr;
+
+  const mid = Math.floor(arr.length / 2);
+  const left = mergeSort(arr.slice(0, mid));    // log n번 분할
+  const right = mergeSort(arr.slice(mid));
+
+  return merge(left, right);                    // n번 병합
+}
+```
+
+### 시간복잡도 비교 (n = 1,000 기준)
+
+| 시간복잡도 | 연산 횟수 | 예시 |
+|-----------|---------|------|
+| O(1) | 1번 | 배열 접근 |
+| O(log n) | 약 10번 | 이진 탐색 |
+| O(n) | 1,000번 | 배열 순회 |
+| O(n log n) | 약 10,000번 | 병합 정렬 |
+| O(n²) | 1,000,000번 | 2중 for문 |
+| O(2ⁿ) | 엄청 많음 | 피보나치 재귀 |
+
+**코딩테스트 시간 제한 기준**
+- 일반적으로 **1초에 약 1억 번(10^8)의 연산** 가능
+- n = 100,000일 때:
+  - O(n): 100,000번 ✅ 통과
+  - O(n²): 100억 번 ❌ 시간 초과!
+
+❓ 시간복잡도를 어떻게 계산할까?<br>
+❗️ **가장 많이 반복되는 부분**을 찾아서 계산한다!
+- for문 하나: O(n)
+- 2중 for문: O(n²)
+- 반복문 + 이진 탐색: O(n log n)
+
+🤓 요약: 시간복잡도는 알고리즘의 효율성을 측정하는 지표! 코딩테스트에서는 입력 크기를 보고 적절한 시간복잡도의 알고리즘을 선택해야 한다. O(n²)보다는 O(n) 또는 O(n log n)을 목표로!
+<br>
+
 ## DP (Dynamic Programming) 동적 프로그래밍
 
 **"한 번 계산한 건 메모해두고 다시 쓰자!"**
